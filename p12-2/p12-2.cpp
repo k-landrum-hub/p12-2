@@ -1,5 +1,5 @@
 /*
-* Korbin Landrum 
+* Korbin Landrum
 * Calender lab
 */
 
@@ -12,9 +12,12 @@ using namespace std;
 bool isLeapYear(int year);
 int daysInMonth(int month, int year);
 string monthOfTheYear(int month);
+int dayOfTheWeek(int month, int day, int year);
+string dayOfTheWeekWord(int month, int day, int year);
+
 
 //constant variables
-const int DAYS_IN_MONTHS[13] = { 31,28,31,30,31,31,30,31,30,31,30,31,29 };
+const int DAYS_IN_MONTHS[13] = { 31,28,31,30,31,30,31,31,30,31,30,31,29 };
 
 int main() {
 	string input;
@@ -22,9 +25,9 @@ int main() {
 
 	while (true) {
 		string input;
-		int month, year;
+		int day, month, year;
 
-		cout << "Enter a month and a year or Q to quit: ";
+		cout << "Enter a date or Q to quit: ";
 		cin >> input;
 
 		// breaks if Q or q
@@ -33,15 +36,17 @@ int main() {
 		}
 
 		month = stoi(input);
-		cin >> year;
+		cin >> day >> year;
+
 
 		if (year < 1582) {
-			cout << "Enter a year 1582 or higher" << endl;
+			cout << day << " " << month << " " << year << endl;
 		}
-			else {
-				cout << monthOfTheYear(month) << " " << year << " has " << daysInMonth(month,year) << " days." << endl;
-			}
+		else {
+			cout << dayOfTheWeekWord(month, day, year) << ", " << monthOfTheYear(month) << " " << day << ", " <<
+				year << endl;
 		}
+	}
 
 }
 
@@ -49,7 +54,7 @@ int main() {
 
 //Checks if it is a leap year
 bool isLeapYear(int year) {
-	if (year % 4 == 0) {
+	if ((year % 4 == 0 &&  0 != (year % 100)) || year % 400 == 0) {
 		return true;
 	}
 	else {
@@ -67,31 +72,77 @@ int daysInMonth(int month, int year) {
 	}
 }
 
-string monthOfTheYear(int month) {
-	if (month == 1) {
-		return "January";
-	} else if (month == 2) {
-		return "Febuary";
-	} else if (month == 3) {
-		return "March";
-	} else if (month == 4) {
-		return "April";
-	} else if (month == 5) {
-		return "May";
-	} else if (month == 6) {
-		return "June";
-	} else if (month == 7) {
-		return "July";
-	} else if (month == 8) {
-		return "August";
-	} else if (month == 9) {
-		return "September";
-	} else if (month == 10) {
-		return "October";
-	} else if (month == 11) {
-		return "November";
-	} else if (month == 12) {
-		return "December";
+//Find the day of the week given a date
+int dayOfTheWeek(int month, int day, int year) {
+	if (month == 1 || month == 2) {
+		month += 12;
+		year -= 1;
+	}
+	
+		return (day + (((month + 1) * 26) / 10) + year + (year / 4) + (6 * (year / 100)) + (year / 400)) % 7;	
+}
+
+//converts day of the week number to words
+string dayOfTheWeekWord(int month, int day, int year) {
+	if (dayOfTheWeek(month, day, year) == 0){
+		return "Sauturday";
+	} 
+	else if (dayOfTheWeek(month, day, year) == 1) {
+		return "Sunday";
+	}
+	else if (dayOfTheWeek(month, day, year) == 2) {
+		return "Monday";
+	}
+	else if (dayOfTheWeek(month, day, year) == 3) {
+		return "Tuesday";
+	}
+	else if (dayOfTheWeek(month, day, year) == 4) {
+		return "Wednesday";
+	}
+	else if (dayOfTheWeek(month, day, year) == 5) {
+		return "Thurday";
+	}
+	else if (dayOfTheWeek(month, day, year) == 6) {
+		return "Friday";
 	}
 }
 
+// converts the number month into a word
+string monthOfTheYear(int month) {
+	if (month == 1) {
+		return "January";
+	}
+	else if (month == 2) {
+		return "Febuary";
+	}
+	else if (month == 3) {
+		return "March";
+	}
+	else if (month == 4) {
+		return "April";
+	}
+	else if (month == 5) {
+		return "May";
+	}
+	else if (month == 6) {
+		return "June";
+	}
+	else if (month == 7) {
+		return "July";
+	}
+	else if (month == 8) {
+		return "August";
+	}
+	else if (month == 9) {
+		return "September";
+	}
+	else if (month == 10) {
+		return "October";
+	}
+	else if (month == 11) {
+		return "November";
+	}
+	else if (month == 12) {
+		return "December";
+	}
+}
